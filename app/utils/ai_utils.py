@@ -1,5 +1,8 @@
+import json
 import asyncio
 from openai import OpenAI
+
+from app.utils.prompts import coder_assistant_prompt
 
 client = OpenAI()
 
@@ -16,7 +19,8 @@ async def thread_coder_assistant(
         assistant = client.beta.assistants.create(
             name="Coder Assistant",
             description="A funny coder assistant",
-            model=model
+            instructions=coder_assistant_prompt,
+            model=model,
         )
         assistant_id = assistant.id
     message = client.beta.threads.messages.create(
@@ -45,9 +49,15 @@ async def thread_coder_assistant(
         await asyncio.sleep(1)
         print(".", end='')
     print("\n")
+    coder_assistan_answer = coder_assistan_answer.replace("```json\n", "").replace("```json", "").replace("```", "")
+    try:
+        coder_assistan_answer = json.loads(coder_assistan_answer)
+    except:
+        pass
     print(coder_assistan_answer)
-    return {
+    json_response = {
         "thread_id": thread_id,
         "assistant_id": assistant_id,
         "coder_assistan_answer": coder_assistan_answer
     }
+    return json_response

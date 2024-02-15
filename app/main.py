@@ -6,7 +6,7 @@ load_dotenv()
 from pydantic import BaseModel
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from app.utils.ui_html import htmlUI
 from app.utils.ai_utils import thread_coder_assistant
@@ -29,7 +29,8 @@ async def coder_assistant(
 ):
     coder_assistant_response: dict = await thread_coder_assistant(user_message=user_message.message)
     print(coder_assistant_response)
-    return {
-        "user": user_message.message,
-        "assistant": coder_assistant_response
-        }
+    # return {
+    #     "user": user_message.message,
+    #     "assistant": coder_assistant_response
+    #     }
+    return JSONResponse(content=coder_assistant_response, status_code=200)
