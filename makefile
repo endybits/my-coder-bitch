@@ -3,4 +3,4 @@ install:
 	pip install -U pip && \
 	pip install -r requirements.txt
 run:
-	uvicorn main:app --reload
+	uvicorn app.main:app --reload
